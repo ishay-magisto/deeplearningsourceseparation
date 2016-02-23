@@ -52,8 +52,9 @@ function output = test_denoising_general_kl_bss3(mixture_wav, theta, eI, stage, 
     gain=1;
     m= double(abs(pred_source_signal)./(abs(pred_source_signal)+ (gain*abs(pred_source_noise))+eps));
 
-    output.source_signal =m.*spectrum.mix(:, 1:min(size(m,2), size(spectrum.mix,2)));
-    output.source_noise= spectrum.mix-output.source_signal;
+    xx=1:min(size(m,2), size(spectrum.mix,2))
+    output.source_signal =m.*spectrum.mix(:,xx);
+    output.source_noise= spectrum.mix(:,xx)-output.source_signal;
  
 return;
 

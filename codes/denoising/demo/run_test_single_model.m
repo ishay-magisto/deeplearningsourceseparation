@@ -1,6 +1,6 @@
 function run_test_single_model
 % Given a model, evaluate the performance.
-    baseDir = '../../../';
+    baseDir = 'C:\Users\ishay\Desktop\deeplearningsourceseparation';
     addpath([baseDir, filesep, 'codes']);
     addpath([baseDir, filesep, 'codes', filesep, 'denoising']);
 
@@ -24,13 +24,14 @@ function run_test_single_model
     j=870;
     
     % Load model
-    load([ModelPath, filesep, 'model_', num2str(j),'.mat']);
+    load([ModelPath, filesep, 'denoising_model_', num2str(j),'.mat']);
     eI.saveDir = [baseDir, filesep, 'codes', filesep, 'denoising', ...
         filesep, 'demo', filesep, 'results', filesep];
     %%
     index = 2;
-    [speech, fs] = audioread(['wav', filesep, 'original_speech', num2str(index), '.wav']);
-    [noise, fs] = audioread(['wav', filesep, 'original_noise',num2str(index),'.wav']);
+    thePath = ['wav', filesep, 'original_speech', num2str(index), '.wav'];
+    [speech, fs] = wavread(thePath);
+    [noise, fs] = wavread(['wav', filesep, 'original_noise',num2str(index),'.wav']);
 
     x = speech + noise;    
     eI.fs = fs;
@@ -44,8 +45,8 @@ function run_test_single_model
     wav_singal = wav_singal./max(abs(wav_singal));
     wav_noise = wav_noise./max(abs(wav_noise));    
 
-    audiowrite([eI.saveDir, filesep,'separated_speech',num2str(index),'.wav'], wav_singal, 16000);
-    audiowrite([eI.saveDir, filesep,'separated_noise',num2str(index),'.wav'], wav_noise, 16000);
+    wavwrite(wav_singal, 16000, [eI.saveDir, filesep,'separated_speech',num2str(index),'.wav']);
+    wavwrite( wav_noise, 16000, [eI.saveDir, filesep,'separated_noise',num2str(index),'.wav']);
     
     % Get separation stats
 		[sdr,sir,sar,stoi] = sep_perf(wav_singal, [speech'; noise'], 16000);    
